@@ -11,7 +11,7 @@ router = APIRouter(prefix="/tasks", tags=["Tasks"])
 async def post_task(TASK: TaskCreationModel) -> TaskResponseModel:
     return await create_task(TASK)
 
-@router.get("/", response_model=TaskResponseModel)
+@router.get("/", response_model=list[TaskResponseModel])
 async def get_all_tasks() -> TaskResponseModel:
     return await read_all_tasks()
 

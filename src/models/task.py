@@ -9,7 +9,7 @@ from utils.global_constants import GlobalConstants
 
 
 class TaskUpdateModel(BaseModel):
-    class StatusTypes(Enum, str):
+    class StatusTypes(str, Enum):
         TO_DO = "To Do"
         IN_PROGRESS = "In Progress"
         DONE = "Done"
@@ -34,7 +34,7 @@ class TaskResponseModel(TaskCreationModel):
             return ObjectId(VALUE)
 
         @classmethod
-        def __modify_schema__(cls, FIELD_SCHEMA):
+        def __get_pydantic_json_schema__(cls, FIELD_SCHEMA):
             FIELD_SCHEMA.update(type="string")
 
     id: MongoObjectId = Field(default_factory=MongoObjectId, alias=GlobalConstants.MONGO_ID_FIELD_NAME) # Maps "_id" as defined in MongoDB to "id" as defined in this model
