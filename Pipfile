@@ -5,9 +5,10 @@ name = "pypi"
 
 [packages]
 fastapi = "*"
-motor = "*"
 uvicorn = "*"
 dotenv = "*"
+sqlalchemy = "*"
+asyncpg = "*"
 
 [dev-packages]
 
