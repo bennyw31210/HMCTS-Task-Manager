@@ -2,8 +2,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update as sqlalchemy_update, delete as sqlalchemy_delete
 from sqlalchemy.exc import NoResultFound
-from ...db.tables.task import Task
-from ...models.tasks import TaskCreationModel, TaskUpdateModel, TaskResponseModel
+from db.tables.task import Task
+from models.tasks import TaskCreationModel, TaskUpdateModel, TaskResponseModel
 
 
 async def create_task(TASK: TaskCreationModel, SESSION: AsyncSession) -> TaskResponseModel:
@@ -21,7 +21,7 @@ async def create_task(TASK: TaskCreationModel, SESSION: AsyncSession) -> TaskRes
     SESSION.add(NEW_TASK)
     await SESSION.commit()
     await SESSION.refresh(NEW_TASK)
-    return TaskResponseModel.model_validate(NEW_TASK)
+    return TaskResponseModel.model_validate(NEW_TASK.to_dict())
 
 async def read_all_tasks(SESSION: AsyncSession) -> list[TaskResponseModel]:
     """
@@ -35,7 +35,7 @@ async def read_all_tasks(SESSION: AsyncSession) -> list[TaskResponseModel]:
     """
     RESULT = await SESSION.execute(select(Task))
     TASKS = RESULT.scalars().all()
-    return [TaskResponseModel.model_validate(task) for task in TASKS]
+    return [TaskResponseModel.model_validate(task.to_dict()) for task in TASKS]
 
 async def read_task(ID: int, SESSION: AsyncSession) -> TaskResponseModel | None:
     """
@@ -51,7 +51,7 @@ async def read_task(ID: int, SESSION: AsyncSession) -> TaskResponseModel | None:
     RESULT = await SESSION.execute(select(Task).where(Task.id == ID))
     TASK = RESULT.scalar_one_or_none()
     if TASK:
-        return TaskResponseModel.model_validate(TASK)
+        return TaskResponseModel.model_validate(TASK.to_dict())
     return None
 
 async def update_task(ID: int, TASK_DATA: TaskUpdateModel, SESSION: AsyncSession) -> TaskResponseModel | None:

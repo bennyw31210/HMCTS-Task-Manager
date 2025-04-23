@@ -7,8 +7,8 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from http import HTTPStatus
-from .logger import log_internal_server_error
-from .routers import tasks
+from logger import log_internal_server_error
+from routers import tasks
 
 
 @asynccontextmanager

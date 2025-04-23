@@ -1,7 +1,7 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional, Literal
-from datetime import datetime, timezone
-from ..utils.global_constants import StatusTypes
+from datetime import datetime
+from utils.global_constants import StatusTypes
 
 class TaskUpdateModel(BaseModel):
     """
@@ -46,7 +46,7 @@ class TaskCreationModel(TaskUpdateModel):
         Raises:
             ValidationError: If 'VALUE' is not a datetime set in the future.
         """
-        if VALUE <= datetime.now(timezone.utc):
+        if VALUE <= datetime.now():
             raise ValueError("Due date must be in the future.")
         return VALUE
 

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from http import HTTPStatus
-from ..models.tasks import TaskCreationModel, TaskResponseModel, TaskUpdateModel
-from ..db.crud.crud import create_task, read_all_tasks, read_task, update_task, delete_task
-from ..db.get_async_session import get_async_session
+from models.tasks import TaskCreationModel, TaskResponseModel, TaskUpdateModel
+from db.crud.crud import create_task, read_all_tasks, read_task, update_task, delete_task
+from db.get_async_session import get_async_session
 
 
 def raise_bad_request(REQUEST_ID: int):
@@ -143,7 +143,7 @@ async def patch_status(ID: int, TASK: TaskUpdateModel, SESSION: AsyncSession = D
 
     if UPDATED_TASK:
         return UPDATED_TASK
-    raise_bad_request()
+    raise_bad_request(ID)
 
 @router.delete("/{ID}/", 
                summary="Delete a task", 
@@ -176,4 +176,4 @@ async def remove_task(ID: int, SESSION: AsyncSession = Depends(get_async_session
 
     if DELETE_RESULT:
         return {"message": f"Task with id '{ID}' deleted successfully."}
-    raise_bad_request()
+    raise_bad_request(ID)
