@@ -25,7 +25,7 @@ class Task(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
     status = Column(Enum(StatusTypes), nullable=False, default=StatusTypes.PENDING)
-    due_date = Column(DateTime, nullable=False)
+    due_date = Column(DateTime(timezone=True), nullable=False)
 
     def to_dict(self) -> dict:
         """

@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 from http import HTTPStatus
 from logger import log_internal_server_error
 from routers import tasks
+from db.tables.task import Base
 
 
 @asynccontextmanager
@@ -30,8 +31,15 @@ async def lifespan(app: FastAPI):
     # Load environment variables
     load_dotenv(find_dotenv())
 
+    POSTGRES_URI_PREFIX = os.getenv("POSTGRES_URI_PREFIX")
+    POSTGRES_USER = os.getenv("POSTGRES_USER")
+    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+    POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+    POSTGRES_PORT = os.getenv("POSTGRES_CONTAINER_PORT")
+    POSTGRES_DB = os.getenv("POSTGRES_DB")
+
     # Create async SQLAlchemy engine
-    POSTGRES_ENGINE = create_async_engine(os.getenv("DB_URI"), echo=True)
+    POSTGRES_ENGINE = create_async_engine(f"{POSTGRES_URI_PREFIX}{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}", echo=True)
 
     # Create session maker for asynchronous database access
     AsyncSessionLocal = sessionmaker(

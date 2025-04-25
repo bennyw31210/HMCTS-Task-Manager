@@ -1,6 +1,6 @@
 from pydantic import BaseModel, field_validator
 from typing import Optional, Literal
-from datetime import datetime
+from datetime import datetime, timezone
 from utils.global_constants import StatusTypes
 
 class TaskUpdateModel(BaseModel):
@@ -33,12 +33,12 @@ class TaskCreationModel(TaskUpdateModel):
 
     @field_validator("due_date")
     @classmethod
-    def validate_due_date(cls, VALUE: datetime) -> datetime:
+    def validate_due_date(cls, value: datetime) -> datetime:
         """
         Validates that the due date is set in the future.
 
         Parameters:
-            VALUE (datetime): The datetime to validate.
+            value (datetime): The datetime to validate.
 
         Returns:
             datetime: The validated datetime.
@@ -46,9 +46,17 @@ class TaskCreationModel(TaskUpdateModel):
         Raises:
             ValidationError: If 'VALUE' is not a datetime set in the future.
         """
-        if VALUE <= datetime.now():
+        if value.tzinfo is None or value.tzinfo.utcoffset(value) is None:
+            # Assume naive datetime is in UTC
+            value = value.replace(tzinfo=timezone.utc)
+        else:
+            # Convert all timezone aware datetimes to the correct time in UTC
+            value = value.astimezone(timezone.utc)
+
+        # Compare against the current time in UTC
+        if value <= datetime.now(timezone.utc):
             raise ValueError("Due date must be in the future.")
-        return VALUE
+        return value
 
 
 class TaskResponseModel(TaskCreationModel):

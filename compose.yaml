@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  fastapi:
+    build: ./src
+    container_name: fastapi_app
+    env_file:
+      - .env
+    ports:
+      - ${FASTAPI_HOST_PORT}:${FASTAPI_CONTAINER_PORT}
+    depends_on:
+      - db # Ensure the DB service starts before FastAPI
+    
+  db:
+    build: ./init_db
+    restart: always
+    container_name: postgres_db
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}
+    volumes:
+      - hmctsdata:/var/lib/postgresql/data
+
+volumes:
+  hmctsdata:

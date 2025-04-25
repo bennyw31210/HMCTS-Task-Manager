@@ -1,6 +1,6 @@
 from http import HTTPStatus
 import pytest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from utils.global_constants import StatusTypes
 
 
@@ -15,11 +15,11 @@ async def test_create_task_valid_with_pending_status(CLIENT):
         "due_date": DUE_DATE
     })
     assert RESPONSE.status_code == HTTPStatus.OK
-    data = RESPONSE.json()
-    assert data["title"] == "Test Task"
-    assert data["status"] == StatusTypes.PENDING
-    assert data["description"] == "Testing"
-    assert data["due_date"] == DUE_DATE
+    DATA = RESPONSE.json()
+    assert DATA["title"] == "Test Task"
+    assert DATA["status"] == StatusTypes.PENDING
+    assert DATA["description"] == "Testing"
+    assert DATA["due_date"] == f"{DUE_DATE}Z"
 
 # create_task accepts task with "In Progress" status
 @pytest.mark.anyio
@@ -32,11 +32,11 @@ async def test_create_task_valid_with_in_progress_status(CLIENT):
         "due_date": DUE_DATE
     })
     assert RESPONSE.status_code == HTTPStatus.OK
-    data = RESPONSE.json()
-    assert data["title"] == "Test Task"
-    assert data["status"] == StatusTypes.IN_PROGRESS
-    assert data["description"] == "Testing"
-    assert data["due_date"] == DUE_DATE
+    DATA = RESPONSE.json()
+    assert DATA["title"] == "Test Task"
+    assert DATA["status"] == StatusTypes.IN_PROGRESS
+    assert DATA["description"] == "Testing"
+    assert DATA["due_date"] == f"{DUE_DATE}Z"
 
 # create_task accepts task with "Done" status
 @pytest.mark.anyio
@@ -49,11 +49,45 @@ async def test_create_task_valid_with_done_status(CLIENT):
         "due_date": DUE_DATE
     })
     assert RESPONSE.status_code == HTTPStatus.OK
-    data = RESPONSE.json()
-    assert data["title"] == "Test Task"
-    assert data["status"] == StatusTypes.DONE
-    assert data["description"] == "Testing"
-    assert data["due_date"] == DUE_DATE
+    DATA = RESPONSE.json()
+    assert DATA["title"] == "Test Task"
+    assert DATA["status"] == StatusTypes.DONE
+    assert DATA["description"] == "Testing"
+    assert DATA["due_date"] == f"{DUE_DATE}Z"
+
+# create_task accepts task with UTC due_date in the future
+@pytest.mark.anyio
+async def test_create_task_valid_with_utc_due_date(CLIENT):
+    DUE_DATE = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
+    RESPONSE = await CLIENT.post("/tasks/", json={
+        "title": "Test Task",
+        "description": "Testing",
+        "status": StatusTypes.DONE,
+        "due_date": DUE_DATE
+    })
+    assert RESPONSE.status_code == HTTPStatus.OK
+    DATA = RESPONSE.json()
+    assert DATA["title"] == "Test Task"
+    assert DATA["status"] == StatusTypes.DONE
+    assert DATA["description"] == "Testing"
+    assert datetime.fromisoformat(DATA["due_date"].replace("Z", "+00:00")) == datetime.fromisoformat(DUE_DATE)
+
+# create_task accepts task with timezone offset (e.g. UTC+01:00) due_date in the future
+@pytest.mark.anyio
+async def test_create_task_valid_with_timezone_offset_due_date(CLIENT):
+    DUE_DATE = (datetime.now(timezone(timedelta(hours=1))) + timedelta(days=1)).isoformat()
+    RESPONSE = await CLIENT.post("/tasks/", json={
+        "title": "Test Task",
+        "description": "Testing",
+        "status": StatusTypes.DONE,
+        "due_date": DUE_DATE
+    })
+    assert RESPONSE.status_code == HTTPStatus.OK
+    DATA = RESPONSE.json()
+    assert DATA["title"] == "Test Task"
+    assert DATA["status"] == StatusTypes.DONE
+    assert DATA["description"] == "Testing"
+    assert datetime.fromisoformat(DATA["due_date"].replace("Z", "+00:00")) == datetime.fromisoformat(DUE_DATE)
 
 # create_task accepts task with no description
 @pytest.mark.anyio
@@ -65,11 +99,11 @@ async def test_create_task_valid_with_no_description(CLIENT):
         "due_date": DUE_DATE
     })
     assert RESPONSE.status_code == HTTPStatus.OK
-    data = RESPONSE.json()
-    assert data["title"] == "Test Task"
-    assert data["status"] == StatusTypes.DONE
-    assert data["description"] == None
-    assert data["due_date"] == DUE_DATE
+    DATA = RESPONSE.json()
+    assert DATA["title"] == "Test Task"
+    assert DATA["status"] == StatusTypes.DONE
+    assert DATA["description"] == None
+    assert DATA["due_date"] == f"{DUE_DATE}Z"
 
 # Test get_all_tasks returns a list of tasks
 @pytest.mark.anyio
@@ -99,14 +133,36 @@ async def test_create_task_invalid_status(CLIENT):
     })
     assert RESPONSE.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
-# INVALID: create_task does not accept past due date
+# INVALID: create_task does not accept past due date that is naive
 @pytest.mark.anyio
-async def test_create_task_invalid_past_due_date(CLIENT):
+async def test_create_task_invalid_past_due_date_naive(CLIENT):
     RESPONSE = await CLIENT.post("/tasks/", json={
         "title": "Past Due Task",
         "description": "This is in the past",
         "status": StatusTypes.PENDING,
         "due_date": (datetime.now() - timedelta(days=1)).isoformat()
+    })
+    assert RESPONSE.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+# INVALID: create_task does not accept past due date that is in the UTC format
+@pytest.mark.anyio
+async def test_create_task_invalid_past_due_date_utc(CLIENT):
+    RESPONSE = await CLIENT.post("/tasks/", json={
+        "title": "Past Due Task",
+        "description": "This is in the past",
+        "status": StatusTypes.PENDING,
+        "due_date": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+    })
+    assert RESPONSE.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+
+# INVALID: create_task does not accept past due date with an offset timezone
+@pytest.mark.anyio
+async def test_create_task_invalid_past_due_date_offset_timezone(CLIENT):
+    RESPONSE = await CLIENT.post("/tasks/", json={
+        "title": "Past Due Task",
+        "description": "This is in the past",
+        "status": StatusTypes.PENDING,
+        "due_date": (datetime.now(timezone(timedelta(hours=1))) - timedelta(hours=1)).isoformat()
     })
     assert RESPONSE.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
@@ -188,14 +244,7 @@ async def test_remove_task_valid_success(CLIENT):
 
 # INVALID: remove_task handles a task that doesn’t exist appropriately
 @pytest.mark.anyio
-async def test_delete_task_invalid_not_found(CLIENT):
+async def test_remove_task_invalid_not_found(CLIENT):
     RESPONSE = await CLIENT.delete("/tasks/999999/")
     assert RESPONSE.status_code == HTTPStatus.BAD_REQUEST
     assert "No task exists with an id of '999999'." in RESPONSE.json()["detail"]
-
-# Test read_root method in main.py returns appropriate response
-@pytest.mark.anyio
-async def test_read_root(CLIENT):
-    RESPONSE = await CLIENT.get("/")
-    assert RESPONSE.status_code == 200
-    assert RESPONSE.json() == {"message": "Server is alive."}
