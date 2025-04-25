@@ -5,7 +5,9 @@ from sqlalchemy.orm import sessionmaker
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
+
+from fastapi.staticfiles import StaticFiles
 from http import HTTPStatus
 from logger import log_internal_server_error
 from routers import tasks
@@ -15,7 +17,7 @@ from db.tables.task import Base
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Lifespan context manager for the HMCTS Task Manager application. Initializes the database connection 
+    Lifespan context manager for the HMCTS Task Manager application. Initialises the database connection 
     engine and session maker, and ensures proper cleanup during application shutdown.
     
     Args:
@@ -59,7 +61,7 @@ async def lifespan(app: FastAPI):
 
 def show_error(STATUS_CODE: int, DESCRIPTION: str, DETAIL: str) -> JSONResponse:
     """
-    Generates a standardized error response for HTTP exceptions.
+    Generates a standardised error response for HTTP exceptions.
 
     Args:
         STATUS_CODE (int): The HTTP status code.
@@ -75,11 +77,14 @@ def show_error(STATUS_CODE: int, DESCRIPTION: str, DETAIL: str) -> JSONResponse:
         "detail": DETAIL
     })
 
-# Initialize the FastAPI application
+# Initialise the FastAPI application
 app = FastAPI(title="HMCTS Task Manager Backend", lifespan=lifespan)
 
 # Include the task router from the 'routers' module
 app.include_router(tasks.router)
+
+# Serve static files from the "static" directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Add CORS middleware to allow cross-origin requests from the frontend
 app.add_middleware(CORSMiddleware, 
@@ -135,21 +140,14 @@ def general_exception_handler(REQUEST: Request, EXCEPTION: Exception):
 @app.get("/", 
          summary="Root endpoint", 
          description="You can use this endpoint to check the server is alive.",
-         responses={
-        HTTPStatus.OK: {"description": "Successful Response",
-                        "content": {
-                            "application/json": {
-                                "example": {"message": "Server is alive."}
-                                }
-                            }
-                        },
-        HTTPStatus.INTERNAL_SERVER_ERROR: {"description": "Internal Server Error"}
-    })
-def read_root() -> dict:
+)
+def read_root(response_class=HTMLResponse) -> dict:
     """
-    Root endpoint to check if the server is alive.
+    Root endpoint to serve up the frontend application web page.
 
     Returns:
-        dict: A simple JSON response with a message indicating the server is alive.
+        HTMLResponse: The frontend application web page.
     """
-    return {"message": "Server is alive."}
+    with open("static/index.html") as f:
+        content = f.read()
+    return HTMLResponse(content=content)

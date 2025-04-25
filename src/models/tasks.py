@@ -59,13 +59,23 @@ class TaskCreationModel(TaskUpdateModel):
         return value
 
 
-class TaskResponseModel(TaskCreationModel):
+class TaskResponseModel(TaskUpdateModel):
     """
     Schema for returning task details in API responses.
 
-    Inherits from TaskCreationModel and adds the task ID.
+    Inherits from TaskUpdateModel.
 
     Attributes:
         id (int): Unique identifier of the task.
+        title (str): The title of the task. Required.
+        description (Optional[str]): An optional description of the task.
+        due_date (datetime): The due date and time of the task (must be set in the future).
+    
+    Notes:
+        - We inherit from TaskUpdateModel rather than TaskCreationModel to prevent incorrect validation of
+          the "due_date" validator (only new due dates should receive this validation check)
     """
     id: int
+    title: str
+    description: Optional[str] = None
+    due_date: datetime
