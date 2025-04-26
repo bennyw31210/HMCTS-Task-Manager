@@ -3,13 +3,13 @@
 ## Overview
 
 **HMCTS Task Manager** is a simple task management web  application designed to assist caseworkers in
-keeping track of their tasks and effectively managing their workloads. The site utilises **FastAPI** (Python) for the backend and a lightweight **HTML/CSS/JavaScript** frontend. It allows users to create, view, update and delete tasks via a simple interface through a RESTful API.
+keeping track of their tasks and effectively managing their workloads. The site utilises **FastAI (Python)** for the backend and a lightweight **HTML/CSS/JavaScript** frontend. It allows users to create, view, update and delete tasks via a simple interface through a RESTful API.
 
 ---
 
 ## Features
 
-- REST API for task management (CRUD operations).
+- REST API for task management (CRUD operations)
 - Interactive frontend web app
 - PostgreSQL database integration
 - Logging system
@@ -20,10 +20,10 @@ keeping track of their tasks and effectively managing their workloads. The site 
 ## Functionality
 
 - Create a task with the following properties:
-    -- Title
-    -- Description (optional)
-    -- Status
-    -- Due date/time
+  - Title
+  - Description (optional)
+  - Status
+  - Due date/time
 - Retrieve tasks
 - Update the status of a task
 - Delete a task
@@ -34,20 +34,15 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 ### Backend
 
-- **`routers/`**:  
-  Contains FastAPI routers defining the API endpoints for the task management operations.
+- **`routers/`** - Contains FastAPI routers defining the API endpoints for the task management operations.
 
-- **`main.py`**:
-  The entry point of the FastAPI application. It sets up the API routes and middleware, and houses the application's core settings and configurations including database session initialisation and clean-up functions.
+- **`main.py`** - The entry point of the FastAPI application. It sets up the API routes and middleware, and houses the application's core settings and configurations including database session initialisation and clean-up functions.
 
-- **`db/`**:  
-  Manages database models and database connection sessions using SQLAlchemy. Contains the Create, Read, Update, Delete (CRUD) operations code.
+- **`db/`** - Manages database models and database connection sessions using SQLAlchemy. Contains the Create, Read, Update, Delete (CRUD) operations code.
 
-- **`models/`**:  
-  Contains pydantic models for data validation and serialisation/deserialisation between the API and database.
+- **`models/`** - Contains pydantic models for data validation and serialisation/deserialisation between the API and database.
 
-- **`logger.py`**:  
-  Configures the application's logging for consistent and structured log output, aiding debugging and monitoring.
+- **`logger.py`** - Configures the application's logging for consistent and structured log output, aiding debugging and monitoring.
 
 ### Frontend (Located inside `src/static/`)
 
@@ -70,6 +65,7 @@ Contains JavaScript, CSS and HTML to provide an intuitive UI for interactions wi
 ```bash
 git clone https://github.com/bennyw31210/HMCTS-Task-Manager.git
 cd HMCTS-Task-Manager
+```
 
 ### Run Locally without Docker
 
@@ -78,9 +74,9 @@ pip install pipenv
 pipenv install
 ```
 
-Setup a PostgreSQL database with a table named ***Tasks***. Update the environment variables in the ***.env*** file if and where appropriate.
+Setup a **PostgreSQL** database with a table named **Tasks**. Update the environment variables in the ***`.env`*** file if and where appropriate.
 
-Then run the following command in ***src/*** directory to start the app.
+Then run the following command in the **`src/`** directory to start the app.
 
 ```bash
 uvicorn main:app --reload
@@ -95,6 +91,6 @@ docker compose up --build
 ```
 
 This will:
-- Build the docker images.
-- Start the FastAPI app.
+- Build the docker images
+- Start the FastAPI app
 - Expose the application on [http://localhost:8001/](http://localhost:8001/)
