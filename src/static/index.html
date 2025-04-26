@@ -1,3 +1,5 @@
+<!-- HMCTS Task Manager Frontend (UI) -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,18 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HMCTS Task Manager</title>
     <link rel="stylesheet" href="/static/style.css">
+    
+    <!-- Used for delete (trash can) icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+    <!-- Black page header styled similar to that used on the GOV.UK website -->
     <header class="gov-header">
         <h1>HMCTS Task Manager</h1>
-    </header>    
+    </header>
+
     <div class="container">
+        <!-- Create Task button (opens the respective form) -->
         <header>
             <button id="createTaskBtn" class="govuk-button govuk-button--primary">
                 <span class="icon">+</span> Create Task
             </button>            
         </header>
+
+        <!-- Pending, In Progress and Done columns used to display tasks with the respective status -->
         <div class="task-columns">
             <div class="column" id="pending">
                 <h2>Pending</h2>
@@ -39,9 +48,10 @@
         </div>
     </div>
 
-    <!-- Task Form Modal -->
+    <!-- Create Task Form Modal (opens when the Create Task button is clicked) -->
     <div id="taskFormModal" class="modal">
         <div class="modal-content">
+            <!-- X button displayed in the top left of the form. Acts as a close button. -->
             <span class="close" id="closeModalBtn">&times;</span>
             <h2>Create Task</h2>
             <form id="taskForm">
@@ -68,7 +78,7 @@
         </div>
     </div>
 
-    <!-- Toast Notification Container -->
+    <!-- Toast notification displayed at the bottom of the zcreen to indicate a task has been created /deleted -->
     <div id="toast" class="toast">
         <p id="toast-message">Task was submitted successfully!</p>
     </div>

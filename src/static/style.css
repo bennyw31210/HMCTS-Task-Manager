@@ -1,33 +1,40 @@
+/** Apply styles to the UI **/
+
+/* General page styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    background-color: #f5f5f5; /* Light grey background */
 }
 
+/* GOV.UK-style black header bar */
 .gov-header {
-    background-color: #0b0c0c;
+    background-color: #0b0c0c; /* GOV.UK black */
     color: white;
     padding: 8px 0;
     text-align: center;
     font-size: 18px;
     font-weight: bold;
-    border-bottom: 5px solid #ffdd00;
+    border-bottom: 5px solid #ffdd00; /* Yellow bottom border (GOV.UK accent) */
 }
 
+/* Main content container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
+/* Header that contains the Create Task button */
 header {
     text-align: center;
     margin-bottom: 20px;
 }
 
+/* Create Task button */
 #createTaskBtn {
-    background-color: #00703c;
+    background-color: #00703c; /* GOV.UK green */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -36,30 +43,34 @@ header {
     border-radius: 5px;
 }
 
+/* Plus icon inside the Create Task button */
 #createTaskBtn .icon {
     margin-right: 8px;
 }
 
+/* Modal container (hidden by default) */
 #taskFormModal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1; /* Makes sure modal is above other content */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay background */
 }
 
+/* Modal content (the white box inside the modal) */
 .modal-content {
     background-color: #fff;
-    margin: 15% auto;
+    margin: 15% auto; /* Centered vertically */
     padding: 20px;
     border-radius: 5px;
     width: 500px;
     font-family: Arial, sans-serif;
 }
 
+/* Form elements inside the modal */
 .modal-content input, 
 .modal-content select,
 .modal-content textarea {
@@ -70,11 +81,12 @@ header {
     border: 2px solid #0b0c0c;
     border-radius: 0;
     box-sizing: border-box;
-    resize: vertical;
+    resize: vertical; /* Only textareas can resize vertically */
 }
 
+/* Submit button inside modal */
 .modal-content button[type="submit"] {
-    background-color: #00703c;
+    background-color: #00703c; /* GOV.UK green */
     color: white;
     padding: 10px 16px;
     font-size: 16px;
@@ -83,6 +95,7 @@ header {
     margin-right: 10px;
 }
 
+/* Cancel button inside modal */
 .modal-content button#cancelBtn {
     background-color: #d4351c;
     color: white;
@@ -92,102 +105,112 @@ header {
     cursor: pointer;
 }
 
+/* Container for task status columns */
 .task-columns {
     display: flex;
-    gap: 20px; /* space between columns */
+    gap: 20px; /* Ensure there is space between columns */
     align-items: flex-start;
-    flex-wrap: wrap; /* Ensures that columns wrap to the next line if needed */
+    flex-wrap: wrap; /* Allows wrapping of columns on smaller screens */
 }
 
+/* Individual column styles */
 .column {
-    flex: 1; /* each column takes equal available space */
-    min-width: 300px; /* ensures readability even on small screens */
-    background-color: #cccc;
+    flex: 1; /* Equal width for all columns */
+    min-width: 300px; /* Ensures columns are of a reasonable size to fill a large (computer) screen */
+    background-color: #cccc; /* Light grey background */
     border: 1px solid #bbb;
     border-radius: 5px;
     padding: 10px;
     box-sizing: border-box;
 }
 
+/* Center align column headings */
 .column h2 {
     text-align: center;
 }
 
+/* Container for task cards in each column */
 .task-list {
     min-height: 300px;
     background-color: #fff;
     padding: 10px;
     border-radius: 5px;
-    overflow-y: auto; /* Allow scrolling if there are too many tasks */
-    box-sizing: border-box; /* Prevents overflow of tasks */
+    overflow-y: auto; /* Scrollable if content exceeds height */
+    box-sizing: border-box;
 }
 
+/* Individual task card */
 .task-card {
-    background-color: #fcfc; /* subtle light color */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* slight elevation */
+    background-color: #fcfc; /* Light coloured background so they stand out from the container background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
     transition: box-shadow 0.3s ease;
     padding: 10px;
-    margin-bottom: 10px; /* Space between task cards */
-    box-sizing: border-box; /* Include padding in element size calculation */
+    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
+/* Shadow effect on task card hover */
 .task-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 }
 
+/* Due date label inside a task card */
 .due-date {
     padding: 8px;
     border-radius: 4px;
-    color: white; /* Ensure text is white */
-}
-
-.due-date.overdue {
-    background-color: red; /* Red for overdue tasks */
-}
-
-.due-date.urgent {
-    background-color: orange; /* Orange for urgent tasks */
-}
-
-.due-date.on-time {
-    background-color: green; /* Green for on-time tasks */
-}
-
-.task-card .due-date {
+    color: white; /* Ensures contrast with potential background colours (red, orange, green) */
     font-size: 12px;
     margin-top: 5px;
 }
 
+/* Overdue tasks have a red background colour */
+.due-date.overdue {
+    background-color: red;
+}
+
+/* Urgent tasks (due in less than 24 hours) have an orange background colour */
+.due-date.urgent {
+    background-color: orange;
+}
+
+/* On-time tasks (due in more than 24 hours) have a green background colour */
+.due-date.on-time {
+    background-color: green;
+}
+
+/* Trash icon for deleting tasks */
 .task-card .delete-btn {
     cursor: pointer;
     color: red;
     float: right;
 }
 
-/* Toast styles */
+/* Toast container - hidden by default */
 .toast {
     visibility: hidden;
     position: fixed;
     bottom: 10px;
     left: 50%;
     top: auto;
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* Centers toast horizontally */
     background-color: #333;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 16px;
-    z-index: 100;
+    z-index: 100; /* High z-index to appear above other elements */
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
+/* When toast is visible (JS adds this class) */
 .toast.show {
     visibility: visible;
     opacity: 1;
-    animation: fadeout 3s forwards;
+    animation: fadeout 3s forwards; /* Automatically fade out */
 }
 
+/* Fade-out animation */
 @keyframes fadeout {
     0% { opacity: 1; }
     100% { opacity: 0; }
