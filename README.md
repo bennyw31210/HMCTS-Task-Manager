@@ -86,6 +86,8 @@ By default, the app will be available at [http://localhost:8000/](http://localho
 
 ### Run Using Docker (Recommended)
 
+Run the following command in the root directory:
+
 ```bash
 docker compose up --build
 ```
