@@ -34,7 +34,7 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 ### Backend
 
-- **`routers/`** - Contains FastAPI routers defining the API endpoints for the task management operations.
+- **`routers/`** - Contains FastAPI routes defining the API endpoints for the task management operations.
 
 - **`main.py`** - The entry point of the FastAPI application. It sets up the API routes and middleware, and houses the application's core settings and configurations including database session initialisation and clean-up functions.
 
