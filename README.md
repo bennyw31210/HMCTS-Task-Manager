@@ -50,15 +50,15 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 #### API Endpoints
 
-| Name         | Method | Description                                                    |
-|:-------------|:------:|---------------------------------------------------------------:|
-| /tasks/      | POST   | Create a new task.                                             |
-| /tasks/      | GET    | Retrieve all tasks.                                            |
-| /tasks/{ID}/ | GET    | Retrieve a single task by its ID.                              |
-| /tasks/{ID}/ | PATCH  | Update a task's status.                                        |
-| /tasks/{ID}/ | DELETE | Delete a task.                                                 |
-| /            | GET    | Root endpoint. Retrieve the app's frontend.                    |
-| /docs/       | GET    | Retrieve the **OpenAPI (Swagger)** documentation for this API. |
+| Name           | Method   | Description                                                    |
+|:--------------:|:--------:|:---------------------------------------------------------------|
+| `/tasks/`      | `POST`   | Create a new task.                                             |
+| `/tasks/`      | `GET`    | Retrieve all tasks.                                            |
+| `/tasks/{ID}/` | `GET`    | Retrieve a single task by its ID.                              |
+| `/tasks/{ID}/` | `PATCH`  | Update a task's status.                                        |
+| `/tasks/{ID}/` | `DELETE` | Delete a task.                                                 |
+| `/`            | `GET`    | Root endpoint. Retrieve the app's frontend.                    |
+| `/docs/`       | `GET`    | Retrieve the **OpenAPI (Swagger)** documentation for this API. |
 
 ### Frontend (Located inside `src/static/`)
 
