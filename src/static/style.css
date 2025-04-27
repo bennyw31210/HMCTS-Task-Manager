@@ -16,7 +16,7 @@ body {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
-    border-bottom: 5px solid #ffdd00; /* Yellow bottom border (GOV.UK accent) */
+    border-bottom: 10px solid #00703c; /* Green bottom border (GOV.UK accent) */
 }
 
 /* Main content container */
