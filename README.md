@@ -90,7 +90,7 @@ pip install pipenv
 pipenv install
 ```
 
-Setup a **PostgreSQL** database and run the SQL below to create a table named **Tasks**. 
+Setup a **PostgreSQL** database and execute the **SQL** below to create a table named **Tasks**. 
 
 ```SQL
 -- Create statusType enum if it doesn't exist
