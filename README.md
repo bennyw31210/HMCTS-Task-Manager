@@ -32,7 +32,7 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 ## Project Structure
 
-### Backend
+### Backend (Located inside `src/`)
 
 - **`routers/`** - Contains FastAPI routes defining the API endpoints for the task management operations.
 
@@ -50,7 +50,7 @@ Contains JavaScript, CSS and HTML to provide an intuitive UI for interactions wi
 
 ---
 
-## Installation and Running Locally
+## Installation
 
 ### Prerequisites
 
