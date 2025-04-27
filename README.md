@@ -11,7 +11,7 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 - REST API for task management (CRUD operations)
 - Interactive frontend web app
-- PostgreSQL database integration
+- PostgresSQL database integration
 - Logging system
 - Docker deployment support
 
@@ -74,7 +74,7 @@ pip install pipenv
 pipenv install
 ```
 
-Setup a **PostgreSQL** database with a table named **Tasks**. Update the environment variables in the ***`.env`*** file if and where appropriate.
+Setup a **PostgresSQL** database with a table named **Tasks**. Update the environment variables in the ***`.env`*** file if and where appropriate.
 
 Then run the following command in the **`src/`** directory to start the app.
 
