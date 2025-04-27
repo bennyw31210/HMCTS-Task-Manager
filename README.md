@@ -34,13 +34,17 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 ### Backend (Located inside `src/`)
 
-- **`routers/`** - Contains FastAPI routes defining the API endpoints for the task management operations.
-
 - **`main.py`** - The entry point of the FastAPI application. It sets up the API routes and middleware, and houses the application's core settings and configurations including database session initialisation and clean-up functions.
+
+- **`routers/`** - Contains FastAPI routes defining the API endpoints for the task management operations.
 
 - **`db/`** - Manages database models and database connection sessions using SQLAlchemy. Contains the Create, Read, Update, Delete (CRUD) operations code.
 
 - **`models/`** - Contains pydantic models for data validation and serialisation/deserialisation between the API and database.
+
+- **`tests/`** - Contains unit tests to test the functionality of the application's API endpoints in isolation (an in-memory mock SQLite database was used in place of the PostgreSQL database used in production).
+
+- **`utils/`** - Contains code that is shared across multiple components of the backend.
 
 - **`logger.py`** - Configures the application's logging for consistent and structured log output, aiding debugging and monitoring.
 
