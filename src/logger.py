@@ -1,12 +1,24 @@
 import logging
 import inspect
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+# Set up the base logger
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)
 
-logger = logging.getLogger(__name__)
+# Create a formatter
+FORMATTER = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+
+# Create a console handler (for printing to terminal)
+CONSOLE_HANDLER = logging.StreamHandler()
+CONSOLE_HANDLER.setFormatter(FORMATTER)
+
+# Create a file handler (for writing to a file)
+FILE_HANDLER = logging.FileHandler('app.log')  # <-- 'app.log' is the file name
+FILE_HANDLER.setFormatter(FORMATTER)
+
+# Add handlers to the logger
+LOGGER.addHandler(CONSOLE_HANDLER)
+LOGGER.addHandler(FILE_HANDLER)
 
 def log_internal_server_error(EXCEPTION):
     """
@@ -15,4 +27,4 @@ def log_internal_server_error(EXCEPTION):
     Parameters:
         EXCEPTION (Exception): The exception to log.
     """
-    logger.exception(f'An Internal Server Error was thrown as a result of an exception in "{inspect.stack()[1].function}": {EXCEPTION}')
+    LOGGER.exception(f'An Internal Server Error was thrown as a result of an exception in "{inspect.stack()[1].function}": {EXCEPTION}')

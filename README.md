@@ -3,7 +3,7 @@
 ## Overview
 
 **HMCTS Task Manager** is a simple task management web  application designed to assist caseworkers in
-keeping track of their tasks and effectively managing their workloads. The site utilises **FastAI (Python)** for the backend and a lightweight **HTML/CSS/JavaScript** frontend. It allows users to create, view, update and delete tasks via a simple interface through a RESTful API.
+keeping track of their tasks and effectively managing their workloads. The site utilises **FastAI (Python)** for the backend and a **HTML/CSS/JavaScript** frontend. It allows users to create, view, update and delete tasks via a simple interface through a RESTful API.
 
 ---
 
@@ -11,7 +11,7 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 - REST API for task management (CRUD operations)
 - Interactive frontend web app
-- PostgresSQL database integration
+- PostgreSQL database integration
 - Logging system
 - Docker deployment support
 
@@ -48,6 +48,18 @@ keeping track of their tasks and effectively managing their workloads. The site 
 
 - **`logger.py`** - Configures the application's logging for consistent and structured log output, aiding debugging and monitoring.
 
+#### API Endpoints
+
+| Name         | Method | Description                                                    |
+|:-------------|:------:|---------------------------------------------------------------:|
+| /tasks/      | POST   | Create a new task.                                             |
+| /tasks/      | GET    | Retrieve all tasks.                                            |
+| /tasks/{ID}/ | GET    | Retrieve a single task by its ID.                              |
+| /tasks/{ID}/ | PATCH  | Update a task's status.                                        |
+| /tasks/{ID}/ | DELETE | Delete a task.                                                 |
+| /            | GET    | Root endpoint. Retrieve the app's frontend.                    |
+| /docs/       | GET    | Retrieve the **OpenAPI (Swagger)** documentation for this API. |
+
 ### Frontend (Located inside `src/static/`)
 
 Contains JavaScript, CSS and HTML to provide an intuitive UI for interactions with the API.
@@ -78,7 +90,7 @@ pip install pipenv
 pipenv install
 ```
 
-Setup a **PostgresSQL** database with a table named **Tasks**. Update the environment variables in the ***`.env`*** file if and where appropriate.
+Setup a **PostgreSQL** database with a table named **Tasks**. Update the environment variables in the ***`.env`*** file if and where appropriate.
 
 Then run the following command in the **`src/`** directory to start the app.
 

@@ -138,8 +138,8 @@ def general_exception_handler(REQUEST: Request, EXCEPTION: Exception):
     return show_error(HTTPStatus.INTERNAL_SERVER_ERROR, HTTPStatus.INTERNAL_SERVER_ERROR.phrase, "Something went wrong...")
 
 @app.get("/", 
-         summary="Root endpoint", 
-         description="You can use this endpoint to check the server is alive.",
+         summary="Root endpoint. Retrieve's the app's frontend.", 
+         description="Root endpoint. Retrieve's the app's frontend.",
 )
 def read_root(response_class=HTMLResponse) -> dict:
     """
