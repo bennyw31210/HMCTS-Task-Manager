@@ -90,9 +90,27 @@ pip install pipenv
 pipenv install
 ```
 
-Setup a **PostgreSQL** database with a table named **Tasks**. Update the environment variables in the ***`.env`*** file if and where appropriate.
+Setup a **PostgreSQL** database and run the SQL below to create a table named **Tasks**. 
 
-Then run the following command in the **`src/`** directory to start the app.
+```SQL
+-- Create statusType enum if it doesn't exist
+DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'statustypes') THEN
+        CREATE TYPE statustypes AS ENUM ('PENDING', 'IN_PROGRESS', 'DONE');
+    END IF;
+END $$;
+
+-- Create table if it doesn't exist
+CREATE TABLE IF NOT EXISTS "Tasks" (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    description TEXT,
+    status statustypes NOT NULL DEFAULT 'PENDING',
+    due_date TIMESTAMPTZ NOT NULL
+);
+```
+
+Update the environment variables in the ***`.env`*** file if and where appropriate, then run the following command in the **`src/`** directory to start the app.
 
 ```bash
 uvicorn main:app --reload

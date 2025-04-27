@@ -1,4 +1,4 @@
--- Create type if it doesn't exist
+-- Create statusType enum if it doesn't exist
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'statustypes') THEN
         CREATE TYPE statustypes AS ENUM ('PENDING', 'IN_PROGRESS', 'DONE');
